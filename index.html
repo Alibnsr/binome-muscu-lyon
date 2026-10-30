@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Binôme Muscu Lyon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Palette claire : fond froid, encre bleu nuit, accent bleu électrique, marqueur jaune */
+  --bg:#F2F4F8; --surface:#FFFFFF; --ink:#121A2B; --muted:#5B6578; --line:#D8DDE7;
+  --accent:#2347E8; --accent-ink:#FFFFFF; --mark:#FFD83D; --ok:#1B8A4C;
+  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  /* Idée : une colonne de 640px, titres en condensé géant, formulaire dans une carte, résultat = lien WhatsApp */
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1322; --surface:#161C2E; --ink:#EDF0F7; --muted:#A3ACC0; --line:#2A334A;
+    --accent:#6F8DFF; --accent-ink:#0B102A; --mark:#F5C518; --ok:#4FC47F; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1322; --surface:#161C2E; --ink:#EDF0F7; --muted:#A3ACC0; --line:#2A334A;
+  --accent:#6F8DFF; --accent-ink:#0B102A; --mark:#F5C518; --ok:#4FC47F; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase}
+.logo span{background:var(--mark);color:#121A2B;padding:0 6px}
+.pill{font-size:13px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1;margin:0}
+h1{font-size:clamp(46px,11vw,84px);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;margin-top:20px}
+h1 em{font-style:normal;color:var(--accent)}
+.lead{font-size:20px;margin:18px 0 0;max-width:34em}
+.lead strong{font-weight:600}
+.cta{display:inline-block;margin-top:22px;background:var(--accent);color:var(--accent-ink);font-weight:600;text-decoration:none;padding:14px 22px;border-radius:10px;font-size:18px}
+.cta:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+section{margin-top:44px}
+h2{font-size:34px;font-weight:800;text-transform:uppercase}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.step b{display:block;font-family:var(--display);font-size:38px;line-height:1;color:var(--accent)}
+.step p{margin:8px 0 0;font-size:16px}
+.why{margin-top:16px;font-size:18px;max-width:34em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 18px;margin-top:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1 / -1}
+label,legend{font-weight:600;font-size:15px}
+.hint{font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=tel],select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px;width:100%}
+textarea{min-height:70px;resize:vertical}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:15px;background:var(--bg)}
+.chip input:checked + span{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip input:focus-visible + span{outline:3px solid var(--mark);outline-offset:2px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px}
+.check input{width:20px;height:20px;margin-top:2px;flex:none}
+button.primary{font:inherit;font-weight:600;font-size:18px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:14px 22px;cursor:pointer;width:100%;margin-top:6px}
+.err{color:#B3261E;font-size:15px;margin:10px 0 0;min-height:1.2em}
+:root[data-theme="dark"] .err{color:#FF8A80}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .err{color:#FF8A80} }
+.result{display:none;margin-top:22px;border-top:2px solid var(--line);padding-top:18px}
+.result.show{display:block}
+.result h3{font-size:28px;text-transform:uppercase}
+pre.msg{white-space:pre-wrap;font:inherit;font-size:15px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:12px;margin:12px 0}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+a.wa{flex:1 1 220px;text-align:center;text-decoration:none;background:var(--ok);color:#fff;font-weight:600;padding:14px 18px;border-radius:10px;font-size:18px}
+button.copy{flex:1 1 160px;font:inherit;font-weight:600;font-size:16px;background:var(--surface);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:12px 16px;cursor:pointer}
+.small{font-size:14px;color:var(--muted);margin-top:10px}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.safe{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.safe div{background:var(--surface);border-left:4px solid var(--mark);padding:12px 14px;border-radius:0 10px 10px 0;font-size:16px}
+footer{margin:50px 0 30px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:480px){
+  .steps{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .safe{grid-template-columns:1fr}
+  body{font-size:16px}
+}
+@media (prefers-reduced-motion: no-preference){
+  .chip span,button.primary,.cta{transition:background .15s,color .15s}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="logo">Binôme <span>Muscu</span> Lyon</div>
+  <div class="pill">Test gratuit · Lyon 1 La Doua</div>
+</header>
+
+<main>
+  <h1>Tu t'entraînes <em>seul</em> ?<br>Trouve ton binôme.</h1>
+  <p class="lead">Seul, on saute une séance, puis deux, puis on lâche. À deux, on y va. <strong>Dis-moi ta salle, ton niveau et tes créneaux.</strong> Je te mets en contact avec quelqu'un qui te ressemble, en moins de 48 h. Muscu, street workout ou course, à Lyon.</p>
+  <a class="cta" href="#inscription">Je veux un binôme</a>
+
+  <section>
+    <h2>Comment ça marche</h2>
+    <div class="steps">
+      <div class="step"><b>1</b><p>Tu remplis le formulaire. 2 minutes.</p></div>
+      <div class="step"><b>2</b><p>Je te propose un binôme par WhatsApp : même salle, même niveau, mêmes horaires.</p></div>
+      <div class="step"><b>3</b><p>Vous vous retrouvez à la salle. Je reprends des nouvelles au bout d'une semaine.</p></div>
+    </div>
+    <p class="why">Ce n'est pas encore une appli. C'est un test à Lyon 1 avec de vraies personnes. Si ça marche, l'appli arrive en 2027 et vous serez les premiers dessus.</p>
+  </section>
+
+  <section id="inscription">
+    <h2>Inscription</h2>
+    <form class="card" id="form" novalidate>
+      <div class="grid">
+        <div class="field">
+          <label for="prenom">Prénom</label>
+          <input type="text" id="prenom" name="prenom" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="sport">Sport</label>
+          <select id="sport" name="sport" required>
+            <option value="">Choisir</option>
+            <option>Musculation</option>
+            <option>Street workout</option>
+            <option>Course à pied</option>
+            <option>Muscu + course</option>
+            <option>Foot (équipe qui cherche un match)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="salle">Ta salle ou ton lieu</label>
+          <select id="salle" name="salle" required>
+            <option value="">Choisir</option>
+            <option>On Air</option>
+            <option>Basic-Fit</option>
+            <option>Fitness Park</option>
+            <option>Salle du campus (Lyon 1 / SUAPS)</option>
+            <option>Parc ou street workout en extérieur</option>
+            <option>Pas encore inscrit quelque part</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="quartier">Quartier ou campus <span class="hint">(ex. Doua, Villeurbanne, Part-Dieu)</span></label>
+          <input type="text" id="quartier" name="quartier" required>
+        </div>
+        <div class="field">
+          <label for="niveau">Niveau</label>
+          <select id="niveau" name="niveau" required>
+            <option value="">Choisir</option>
+            <option>Débutant (moins de 6 mois)</option>
+            <option>Intermédiaire (6 mois à 2 ans)</option>
+            <option>Confirmé (plus de 2 ans)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="objectif">Objectif</label>
+          <select id="objectif" name="objectif" required>
+            <option value="">Choisir</option>
+            <option>Prise de masse</option>
+            <option>Perte de poids</option>
+            <option>Être en forme, régulier</option>
+            <option>Performance, force</option>
+            <option>Reprendre après un arrêt</option>
+          </select>
+        </div>
+
+        <fieldset class="field full">
+          <legend>Tes jours <span class="hint">(coche tout ce qui est possible)</span></legend>
+          <div class="chips" id="jours">
+            <label class="chip"><input type="checkbox" name="jour" value="Lun"><span>Lun</span></label>
+            <label class="chip"><input type="checkbox" name="jour" value="Mar"><span>Mar</span></label>
+            <label class="chip"><input type="checkbox" name="jour" value="Mer"><span>Mer</span></label>
+            <label class="chip"><input type="checkbox" name="jour" value="Jeu"><span>Jeu</span></label>
+            <label class="chip"><input type="checkbox" name="jour" value="Ven"><span>Ven</span></label>
+            <label class="chip"><input type="checkbox" name="jour" value="Sam"><span>Sam</span></label>
+            <label class="chip"><input type="checkbox" name="jour" value="Dim"><span>Dim</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="field full">
+          <legend>Tes moments</legend>
+          <div class="chips" id="moments">
+            <label class="chip"><input type="checkbox" name="moment" value="Matin (avant 10h)"><span>Matin</span></label>
+            <label class="chip"><input type="checkbox" name="moment" value="Midi"><span>Midi</span></label>
+            <label class="chip"><input type="checkbox" name="moment" value="Après-midi"><span>Après-midi</span></label>
+            <label class="chip"><input type="checkbox" name="moment" value="Soir (après 18h)"><span>Soir</span></label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="genre">Tu es</label>
+          <select id="genre" name="genre">
+            <option value="">Je préfère ne pas dire</option>
+            <option>Un homme</option>
+            <option>Une femme</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="binome">Ton binôme</label>
+          <select id="binome" name="binome">
+            <option>Peu importe</option>
+            <option>Même genre que moi</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="tel">Ton numéro WhatsApp <span class="hint">(je ne le donne à personne sans ton accord)</span></label>
+          <input type="tel" id="tel" name="tel" autocomplete="tel" placeholder="06 12 34 56 78" required>
+        </div>
+        <div class="field full">
+          <label for="libre">Un mot sur toi <span class="hint">(facultatif : programme, ce que tu cherches)</span></label>
+          <textarea id="libre" name="libre"></textarea>
+        </div>
+        <div class="field full">
+          <label class="check"><input type="checkbox" id="majeur" required><span>J'ai 18 ans ou plus.</span></label>
+        </div>
+      </div>
+      <p class="err" id="err" aria-live="polite"></p>
+      <button class="primary" type="submit">Préparer mon message</button>
+
+      <div class="result" id="result" aria-live="polite">
+        <h3>Ton message est prêt</h3>
+        <p>Il part sur mon WhatsApp. Je te réponds dans la journée.</p>
+        <pre class="msg" id="msg"></pre>
+        <div class="row">
+          <a class="wa" id="wa" href="#" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>
+          <button class="copy" type="button" id="copy">Copier le message</button>
+        </div>
+        <p class="small" id="fallback"></p>
+      </div>
+    </form>
+  </section>
+
+  <section>
+    <h2>Les règles</h2>
+    <div class="safe">
+      <div>18 ans et plus. Pour les mineurs, ce sera plus tard.</div>
+      <div>Première rencontre à la salle ou dans un parc, jamais chez quelqu'un.</div>
+      <div>Je ne donne ton numéro que si vous êtes d'accord tous les deux.</div>
+      <div>Un problème avec quelqu'un ? Tu me le dis, je gère.</div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>Questions</h2>
+    <dl>
+      <dt>C'est gratuit ?</dt>
+      <dd>Oui. Pendant tout le test, et après aussi pour les sportifs.</dd>
+      <dt>Qui est derrière ?</dt>
+      <dd>Ali, ancien étudiant de Lyon 1, inscrit chez On Air. J'ai lâché la salle plusieurs fois parce que j'y allais seul. J'ai cherché quelqu'un pour m'entraîner et je n'ai pas trouvé d'endroit simple pour ça.</dd>
+      <dt>Je ne suis pas à Lyon 1 ?</dt>
+      <dd>Inscris-toi quand même. Je commence par la Doua, mais je prends tout Lyon et Villeurbanne.</dd>
+      <dt>Et le foot ?</dt>
+      <dd>Si ton équipe cherche des matchs contre d'autres équipes, inscris-toi avec « Foot ». Je lance ça dès qu'il y a assez d'équipes.</dd>
+    </dl>
+  </section>
+</main>
+
+<footer>
+  Binôme Muscu Lyon · test lancé en novembre 2026 à Lyon 1 · tes réponses restent entre nous.
+</footer>
+</div>
+
+<script>
+(function(){
+  // Numéro WhatsApp d'Ali, format international sans + ni espaces (ex : 33612345678). Vide = pas encore configuré.
+  var WHATSAPP = "33698613721";
+
+  var form = document.getElementById('form');
+  var err = document.getElementById('err');
+  var result = document.getElementById('result');
+  var msgEl = document.getElementById('msg');
+  var wa = document.getElementById('wa');
+  var copy = document.getElementById('copy');
+  var fallback = document.getElementById('fallback');
+
+  function val(id){ return document.getElementById(id).value.trim(); }
+  function checked(name){
+    return Array.prototype.map.call(document.querySelectorAll('input[name="'+name+'"]:checked'), function(i){ return i.value; });
+  }
+
+  function build(){
+    var jours = checked('jour'), moments = checked('moment');
+    var lines = [
+      "Salut Ali, je veux un binôme !",
+      "Prénom : " + val('prenom'),
+      "Sport : " + val('sport'),
+      "Salle / lieu : " + val('salle'),
+      "Quartier : " + val('quartier'),
+      "Niveau : " + val('niveau'),
+      "Objectif : " + val('objectif'),
+      "Jours : " + (jours.length ? jours.join(', ') : 'souple'),
+      "Moments : " + (moments.length ? moments.join(', ') : 'souple'),
+      "Binôme : " + val('binome') + (val('genre') ? " (je suis " + val('genre').toLowerCase() + ")" : ""),
+      "Mon numéro : " + val('tel'),
+      "18 ans ou plus : oui"
+    ];
+    if (val('libre')) lines.push("Un mot : " + val('libre'));
+    return lines.join("\n");
+  }
+
+  function validate(){
+    var missing = [];
+    if (!val('prenom')) missing.push('ton prénom');
+    if (!val('sport')) missing.push('ton sport');
+    if (!val('salle')) missing.push('ta salle');
+    if (!val('quartier')) missing.push('ton quartier');
+    if (!val('niveau')) missing.push('ton niveau');
+    if (!val('objectif')) missing.push('ton objectif');
+    if (!checked('jour').length && !checked('moment').length) missing.push('au moins un jour ou un moment');
+    var tel = val('tel').replace(/[\s.\-]/g,'');
+    if (!/^(\+33|0033|0)[1-9]\d{8}$/.test(tel)) missing.push('un numéro de téléphone français valide');
+    if (!document.getElementById('majeur').checked) missing.push('la case 18 ans ou plus');
+    return missing;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var missing = validate();
+    if (missing.length){
+      err.textContent = "Il manque : " + missing.join(', ') + ".";
+      result.classList.remove('show');
+      return;
+    }
+    err.textContent = "";
+    var text = build();
+    msgEl.textContent = text;
+    if (WHATSAPP){
+      wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text);
+      wa.style.display = "";
+      fallback.textContent = "Si WhatsApp ne s'ouvre pas, copie le message et envoie-le au +" + WHATSAPP.replace(/^33/, "33 ") + ".";
+    } else {
+      wa.style.display = "none";
+      fallback.textContent = "Copie ce message et envoie-le à Ali par WhatsApp ou Instagram.";
+    }
+    result.classList.add('show');
+    result.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  copy.addEventListener('click', function(){
+    var text = msgEl.textContent;
+    var done = function(){ copy.textContent = "Copié !"; setTimeout(function(){ copy.textContent = "Copier le message"; }, 2000); };
+    var fail = function(){ copy.textContent = "Sélectionne le texte et copie-le"; };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail);
+      else fail();
+    } catch (ex) { fail(); }
+  });
+})();
+</script>
+</body>
+</html>
